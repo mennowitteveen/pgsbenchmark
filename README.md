@@ -1,6 +1,7 @@
 # pgsbenchmark.org
 
-<! --- The benchmark platform for privacy-preserving benchmark for polygenic prediction. -->
+<!-- The benchmark platform for privacy-preserving benchmark for polygenic prediction. -->
+
 The platform for privacy-preserving benchmarks for polygenic prediction.
 
 ## Abstract of accompanying paper
