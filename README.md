@@ -11,7 +11,7 @@ It is potentially useful for:
 
 ## Leaderboard
 
-<img width="118" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
+<img width="218" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
 
 
 ## The Benchmark data
