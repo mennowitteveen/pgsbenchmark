@@ -11,6 +11,9 @@ It is potentially useful for:
 
 ## Leaderboard
 
+This table gives the result for the benchmark and tells which approaches are state-of-the-art. More approaches will be added later.
+If you want to have your method on the leaderboard, please send me an email.
+
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
 
 
@@ -37,7 +40,7 @@ In other words, the benchmark data on this site provides everything needed to de
 Link to the paper:
 https://www.biorxiv.org/content/10.1101/2022.10.10.510645v1
 
-<br><br>
+<br>
 
 ![image](https://user-images.githubusercontent.com/6292714/195577590-a8b9e900-bcd8-41ae-a7d6-edc42322cb35.png)
 
