@@ -9,7 +9,7 @@ It is potentially useful for:
 <!-- [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev) -->
 <!-- [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev?labpath=minimal.ipynb) -->
 
-## Leaderboard
+## The Leaderboard
 
 This table gives the result for the benchmark and tells which approaches are state-of-the-art. More approaches will be added later.
 If you want to have your method on the leaderboard, please send me an email.
