@@ -6,16 +6,18 @@ The platform for privacy-preserving benchmarks for polygenic prediction.
 
 ## Leaderboard
 
+<img width="518" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
+
 
 ## The Benchmark data
 
 The files contain all the data that is needed for computing the benchmark and develop PGS methods yourself.
 It is save in HDF5 format.
 
-External Sumstats & Validation dataset (LD + matched GWAS sumstats for the 10K induviduals): <br>
+**External Sumstats & Validation dataset (LD + matched GWAS sumstats for the 10K induviduals): **<br>
 https://drive.google.com/file/d/1eZIiuz__tiqEtTyL14C_GwPEC6raSFSf
 
-Test dataset (LD + matched GWAS sumstats for 352K induviduals): <br>
+**Test dataset (LD + matched GWAS sumstats for 352K induviduals): **<br>
 https://drive.google.com/file/d/12v67vJoAZqkvaStqiYzUrAezS4KTNdNP
 
 I will add a tutorial with code soon to make using the data easier.
