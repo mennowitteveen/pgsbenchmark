@@ -1,8 +1,8 @@
 # pgsbenchmark.org
 
-The platform for privacy-preserving benchmarks for polygenic prediction.
+The platform for privacy-preserving benchmarks for polygenic prediction. ]
 
-It is potentially useful for:
+It is potentially useful for: 
 1.	**People that develop PGS methods -> t**he data on pgsbenchmark.org allows them to benchmark their approach and provides everything needed for developing a PGS method.
 2.	**People that are looking for a PGS method to use ->** They can see which method is currently state-of-the-art (especially if point 1 happens).
 
