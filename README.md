@@ -40,7 +40,7 @@ Recently, several new approaches for creating polygenic scores (PGS) have been d
 In other words, the benchmark data on this site provides everything needed to develop polygenic score methods yourself. We hope that this resource will also become a great resource for determining which PGS approaches are state-of-the-art if many authors of PGS approaches use the resource to evaluate their methods and email us the result.
 
 
-Witteveen, M.J., Pedersen, E.M., Meijsen, J., Andersen, M.R., Privé, F., Speed, D. and Vilhjálmsson, B.J., 2022. Publicly Available Privacy-preserving Benchmarks for Polygenic Prediction. bioRxiv.
+**Witteveen, M.J., Pedersen, E.M., Meijsen, J., Andersen, M.R., Privé, F., Speed, D. and Vilhjálmsson, B.J., 2022. Publicly Available Privacy-preserving Benchmarks for Polygenic Prediction. bioRxiv.**
 
 
 Link to the paper:
