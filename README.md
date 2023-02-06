@@ -29,8 +29,6 @@ https://drive.google.com/file/d/1eZIiuz__tiqEtTyL14C_GwPEC6raSFSf
 **Test dataset (LD + matched GWAS sumstats for 352K induviduals):**<br>
 https://drive.google.com/file/d/12v67vJoAZqkvaStqiYzUrAezS4KTNdNP
 
-I will add a tutorial with code soon to make using the data easier.
-
 <br>
 
 ## Abstract of accompanying paper
