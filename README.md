@@ -1,5 +1,6 @@
 # pgsbenchmark.org
 
+
 The platform for privacy-preserving benchmarks for polygenic prediction. 
 
 It is potentially useful for: 
@@ -46,6 +47,7 @@ https://www.biorxiv.org/content/10.1101/2022.10.10.510645v1
 
 <br>
 
+<!-- test -->
 
 ![image](https://user-images.githubusercontent.com/6292714/195577590-a8b9e900-bcd8-41ae-a7d6-edc42322cb35.png)
 
