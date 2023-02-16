@@ -10,6 +10,8 @@ It is potentially useful for:
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev) 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev?labpath=nbs/loaders.ipynb)
 
+https://github.com/binder-examples/jupyter-extension
+
 <br>
 
 ## The Leaderboard
