@@ -18,7 +18,7 @@ It is potentially useful for:
 [![Google Colab](https://badgen.net/badge/Launch/on%20Google%20Colab/blue?icon=terminal)](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)
 
 
-[![Google Colab](https://badgen.net/badge/Launch/on%20Google%20Colab/blue?icon=terminal)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/dev/nbs/loaders.ipynb)
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/dev/nbs/loaders.ipynb)
 
 https://github.com/mennowitteveen/pgsbenchmark/blob/dev/nbs/loaders.ipynb
 
