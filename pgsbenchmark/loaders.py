@@ -419,9 +419,6 @@ class BaseLinkageData():
                 pd.DataFrame([json.dumps(master_dt)]).to_hdf(os.path.join(self.curdn, curfn), key='master_dt')
             
             if self.verbose: print('\nDone')
-                
-        def someextramethod(self):
-            return True
 
         def save_linkage_region(self, *, i, fn, keyfmt='ld/chrom{chrom}/i{i}/{varname}'): 
             # using 'store' instead of 'save' to indicate a connected relationship with 
