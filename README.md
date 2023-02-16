@@ -14,6 +14,11 @@ https://github.com/binder-examples/jupyter-extension
 
 <br>
 
+```
+import numpy
+test code
+
+```
 ## The Leaderboard
 
 This table gives the result for the benchmark and tells which approaches are state-of-the-art. More approaches will be added later.
