@@ -37,7 +37,7 @@ jupyter notebook ./pgsbenchmark/nbs/PPB-demonstration.ipynb
 
 or do it the easy way with Google Colab, by clicking the following link:
 
-[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/dev/nbs/PPB-demonstration.ipynb)
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/main/nbs/PPB-demonstration.ipynb)
 
 <br>
 
