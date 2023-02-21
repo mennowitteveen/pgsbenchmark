@@ -7,36 +7,36 @@ It is potentially useful for:
 1.	**People that develop PGS methods -> t**he data on pgsbenchmark.org allows them to benchmark their approach and provides everything needed for developing a PGS method.
 2.	**People that are looking for a PGS method to use ->** They can see which method is currently state-of-the-art.
 
-
-<!-- - [Do_we_even_need_UCB.ipynb](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)   -->
-
-
-
+<!-- notes to self:
+[Do_we_even_need_UCB.ipynb](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)   -->
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev) 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev?labpath=nbs/loaders.ipynb)
-
 [![Google Colab](https://badgen.net/badge/Launch/on%20Google%20Colab/blue?icon=terminal)](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)
-
-
-[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/dev/nbs/PPB-demonstration.ipynb)
-
 https://github.com/mennowitteveen/pgsbenchmark/blob/dev/nbs/loaders.ipynb
-
 https://github.com/binder-examples/jupyter-extension
+ -->
 
-<br>
 
-```
-import numpy
-test code
-
-```
 ## The Leaderboard
 
 This table gives the result for the benchmark and tells which approaches are state-of-the-art. More approaches will be added later.
 If you want to have your method on the leaderboard, please send me an email.
 
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
+<br>
+
+## Getting started
+
+Run the following line on a unix system with Jupyter installed.
+```
+git clone https://github.com/mennowitteveen/pgsbenchmark.git
+jupyter notebook ./pgsbenchmark/nbs/PPB-demonstration.ipynb
+```
+
+or do it the easy way with Google Colab, by clicking the following link:
+
+[![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/dev/nbs/PPB-demonstration.ipynb)
+
 <br>
 
 ## The Benchmark data
