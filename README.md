@@ -25,7 +25,7 @@ This table gives the result for the benchmark and tells which approaches are sta
 If you want to have your method on the leaderboard, please send me an email.
 
 <img width="218" alt="image" src="https://user-images.githubusercontent.com/6292714/198376342-38f04f6f-c2cd-481a-8072-37b11e9c0625.png">
-<br>
+<br> 
 
 ## Getting started
 
@@ -39,7 +39,7 @@ or do it the easy way with Google Colab, by clicking the following link:
 
 [![Google Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/mennowitteveen/pgsbenchmark/blob/main/nbs/PPB-demonstration.ipynb)
 
-or if the Colab messages "Warning: This notebook was not authored by Google." perhaps scared you, you can alternatively click the following button for a similar cloud experience (=slower though):
+or if the Colab messages *"Warning: This notebook was not authored by Google."* scared you, you can alternatively click the following button for a similar cloud experience (=slower though):
 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/main?labpath=nbs/PPB-demonstration.ipynb)
 
