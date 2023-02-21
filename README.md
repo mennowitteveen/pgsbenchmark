@@ -29,7 +29,7 @@ If you want to have your method on the leaderboard, please send me an email.
 
 ## Getting started
 
-Run the following line on a unix system with Jupyter installed.
+Run the following line on a Unix system with Jupyter installed.
 ```
 git clone https://github.com/mennowitteveen/pgsbenchmark.git
 jupyter notebook ./pgsbenchmark/nbs/PPB-demonstration.ipynb
