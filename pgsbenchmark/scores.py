@@ -10,54 +10,52 @@ import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
 from pysnptools.standardizer import UnitTrained
-from tqdm import tqdm
-from functools import partial
+# from functools import partial
+try:
+    from tqdm.auto import tqdm
+except:
+    tqdm = lambda x:x
+    
 # tqdm = partial(tqdm, position=0, leave=True)
-tqdm = partial(tqdm, position=0, leave=True, ncols=70, delay=0.3)
+# from tqdm import tqdm
+# from functools import partial
+# tqdm = partial(tqdm, position=0, leave=True)
+# tqdm = partial(tqdm, position=0, leave=True, ncols=70, delay=0.3)
 
 locals_dt = dict()    
 
 
 class PrivacyPreservingMetricsComputer():
     
-    def __init__(self, *, linkdata, brd, s, Bm, dtype='float32', cov_method='local', 
-                 clear_linkage=True, verbose=True):
+    def __init__(self, *, linkdata, brd, Bm, s=None, dtype='float32',
+                 clear_linkage=True, pbar=tqdm, verbose=True):
         
         self.linkdata   = linkdata
         self.brd        = brd
-        assert (np.isnan(s).sum()+np.isinf(s).sum()) == 0
+#         assert (np.isnan(s).sum()+np.isinf(s).sum()) == 0
         self.s          = s
         self.Bm         = Bm 
         self.dtype      = dtype
-        self.cov_method = cov_method
         self.clear_linkage = clear_linkage
+        if not pbar: pbar = lambda x: x
+        self.pbar       = pbar
         self.verbose    = verbose
-        
-        self._do_global = False
-        self._do_local  = False
-        if cov_method == 'local': # Local Residualized Marginals
-            self._do_local  = True
-        elif cov_method == 'global': # Global Residualized Marginals
-            self._do_global = True
-        elif cov_method == 'glocal': # Global Local Residualized Marginals
-            self._do_global = True
-            self._do_local  = True
-        else:
-            raise Exception(f'Option not recognized: \'{cov_method}\' ')
             
     def evaluate(self, debug=False):
         
         # Load and init variables:
         linkdata = self.linkdata
         #linkdata = self.linkdata.init() # init, in case required.
-        brd = self.brd; s = self.s; Bm = self.Bm
+        brd = self.brd; Bm = self.Bm
+        if self.verbose & (self.s is None): print('Retrieving Standard Dev. var \'s\'')
+        s = linkdata.get_stansda().stats[:,[1]] if self.s is None else self.s
+        assert (np.isnan(s).sum()+np.isinf(s).sum()) == 0 # add s =standard dev as argument with object creation if this line keeps failing
         bCb = 0.; BmBt = 0.
         info_dt = dict()
 
         # Cycle through the blocks:
-        for i, geno_dt in tqdm(linkdata.reg_dt.items()):
-            if self.verbose: print(f'PPB: Processing region {i}', end='\r')
-
+        for i, geno_dt in self.pbar(linkdata.reg_dt.items()):
+            #if self.verbose: print(f'PPB: Processing region {i}', end='\r')
             # Ready the LD:
             L = linkdata.get_left_linkage_region(i=i)
             D = linkdata.get_auto_linkage_region(i=i)
@@ -84,9 +82,7 @@ class PrivacyPreservingMetricsComputer():
             # Pruning to minimize memory overhead:
             if (i > 0) and self.clear_linkage:
                 linkdata.clear_linkage_region(i=i-1)
-            if (i > 38) & debug:
-                break
-                return locals()
+            #if (i > 38) & debug: break; return locals()
 
         # Complete resutls:
         linkdata.clear_all_xda()
@@ -101,7 +97,7 @@ class PrivacyPreservingMetricsComputer():
 # locals_dt = dict()
 class MultiPGSComputer():
     
-    def __init__(self, *, brd, unscaled=True, verbose=False, dtype='float32', allow_nan=False):
+    def __init__(self, *, brd, unscaled=True, verbose=False, dtype='float32', allow_nan=False, pbar=tqdm):
         self.brd   = brd
         if hasattr(brd, 'val'):
             assert np.sum(np.isnan(brd.val)) == 0 
@@ -109,6 +105,7 @@ class MultiPGSComputer():
         self.verbose = verbose
         self.dtype  = dtype
         self.allow_nan = allow_nan
+        self.pbar = pbar
         
     def predict(self, *, srd, prd=None, n_inchunk=1000, stansda=None):
             
@@ -124,7 +121,7 @@ class MultiPGSComputer():
         
         # Loop through Genome:
         stansda_lst = []; start=0
-        for start in tqdm(range(0, srd.shape[1], n_inchunk)):
+        for start in self.pbar(range(0, srd.shape[1], n_inchunk)):
             stop = min(start+n_inchunk, srd.shape[1])
             sda, stansda = srd[:,start:stop].read(dtype=self.dtype).standardize(return_trained=True)
             X = sda.val

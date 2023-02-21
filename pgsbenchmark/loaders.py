@@ -22,7 +22,6 @@ class SqrtNinv(Unit):
     def __init__(self):
         super(SqrtNinv, self).__init__()
 
-# @dataclass
 class BaseLinkageData():
 
     def __init__(self, *, sst_df=None, regdef_df=None, master_dt=None, #There should be sst_df or master_dt
@@ -31,16 +30,19 @@ class BaseLinkageData():
                  lrd=None, lda_standardizer=None,
                  grd=None, gda_standardizer=False,
                  
-                 shift=0, cm=None, _setzero=True,
+                 shift=0, cm=None, _setzero=True, ddof=0, #ddof should remain 0 for now
                  
                  clear_xda=True, # Refactor with _clear?
                  clear_linkage=False,
                  compute_sumstats=False,
                  calc_allelefreq=False,
+                 intersect_apply=True,
                  
-                 _onthefly_retrieval=True,
+                 _onthefly_retrieval=True, # These underscore options are the advanced developer options
                  _save_vars = ['L','D','R','sst_df'],
                  _clear_vars = ['L','D','R'],
+                 _cross_chrom_ld = False,
+                 
                  gb_size_limit=10., dtype='float32', verbose=False):
         
         if True:
@@ -61,6 +63,7 @@ class BaseLinkageData():
             if grd is not None:
                 assert gda_standardizer or (gda_standardizer is None)
             assert type(compute_sumstats) is bool
+            if ddof != 0: raise NotImplementedError('delta deg. of freedom have to 0 for this version')
             self.reg_dt = dict()
             self.cur_total_size_in_gb = 0.0
             self.xda_q = deque()
@@ -92,10 +95,13 @@ class BaseLinkageData():
 
         if self.prd is not None:
             n_start = len(self.prd.iid)
+            n_pheno = self.prd.shape[1]
+            if n_pheno > 1: raise NotImplementedError(f'only one pheno in prd allowed {n_pheno} detected ({prd.col}), for now. remove other phenos')
             self.srd, self.prd = pst.util.intersect_apply([self.srd, self.prd])
             if len(self.prd.iid) != n_start:
                 warnings.warn('Number of samples do not match up after internal intersection, samples were lost:' 
                               f'{n_start - len(self.prd.iid)}, start = {n_start}, after_intersection = {len(self.prd.iid)}')
+                if not self.intersect_apply: raise Exception('Intersection was required, but may not performed. Hence raising this error.')
 
         if self.grd is not None:
             # Check alignment for now, auto alignment needs work cause iid stuffs:
@@ -113,7 +119,7 @@ class BaseLinkageData():
         def init_regions(self):
             do_beta_moving = ('beta_mrg' in self.sst_df.columns)
             if not do_beta_moving:
-                warnings.warn('No \'beta\' column detected in sst_df! This means that no summary stats were detected.')
+                warnings.warn('No \'beta_mrg\' column detected in sst_df! This means that no summary stats were detected.')
             else:
                 assert 'n_eff' in self.sst_df.columns
             cur_chrom = None
@@ -190,6 +196,8 @@ class BaseLinkageData():
             try:
                 if self.reg_dt[i]['chrom'] == self.reg_dt[j]['chrom']:
                     res = True
+                elif self._cross_chrom_ld:
+                    res = True
                 else:
                     res = False
             except Exception as e:
@@ -205,13 +213,13 @@ class BaseLinkageData():
                 self_sda = self.get_sda(i=i)
                 dist_sda = self.get_sda(i=j)
                 n = len(self_sda.iid)
-                S_shift = self_sda.val.T.dot(dist_sda.val) / n
+                S_shift = self_sda.val.T.dot(dist_sda.val) / (n - self.ddof)
                 return S_shift
             else:
                 self_sda = self.get_sda(i=i)
                 return np.zeros((self_sda.val.shape[1], 0))
 
-        def compute_linkage_cmfromregion(self, *, i, cm):            
+        def compute_linkage_cmfromregion(self, *, i, cm):
             geno_dt = self.reg_dt[i]; lst = []
             if cm < 0: # Doing left:
                 stop_j   = geno_dt['start_j']
@@ -262,7 +270,7 @@ class BaseLinkageData():
             X = sda.val
             y = self.get_pda().val
             n = len(y)
-            c_reg = X.T.dot(y) / n
+            c_reg = X.T.dot(y) / (n - self.ddof)
             return c_reg   
 
         def compute_allelefreq_region(self, *, i):
@@ -631,15 +639,19 @@ class BaseLinkageData():
                     
             standardizer_list = []
             for i, geno_dt in self.reg_dt.items():
-                if 'stansda' in geno_dt.keys():
-                    if type(geno_dt['stansda']) is UnitTrained:
-                        standardizer_list.append(geno_dt['stansda'])
+                #(not 'stansda' in geno_dt.keys())
+                if (not type(geno_dt['stansda']) is UnitTrained) & self._onthefly_retrieval:
+                    self.retrieve_linkage_region(i=i)
+                if type(geno_dt['stansda']) is UnitTrained:
+                    standardizer_list.append(geno_dt['stansda'])
+                else:
+                    raise Exception('No standardizer detected. Compute this first. Contact dev if issue persists.')
 
             assert np.all([type(stan) is UnitTrained for stan in standardizer_list])            
             sid = np.concatenate([stan.sid for stan in standardizer_list])
             assert np.unique(sid).shape[0] == sid.shape[0]
 
-            stats = np.concatenate([stan.stats for stan in standardizer_list], dtype=self.dtype)
+            stats = np.concatenate([stan.stats for stan in standardizer_list])
             combined_unit_standardizer = UnitTrained(sid, stats)
             self.stansda = combined_unit_standardizer
             return combined_unit_standardizer
@@ -647,6 +659,19 @@ class BaseLinkageData():
 ''
 class LinkageData(BaseLinkageData):
     pass
+
+def load_bimfam(base_fn, strip=True, bim=True, fam=True, fil_arr=None):
+    if strip and (base_fn.split('.')[-1] in ('bim','fam','bed')): base_fn = '.'.join(base_fn.split('.')[:-1])
+    bim_df = pd.read_csv(base_fn + '.bim', delim_whitespace=True, header=None, 
+                         names=['chrom', 'snp', 'cm', 'pos', 'A1', 'A2']) if bim else None
+    fam_df = pd.read_csv(base_fn + '.fam', delim_whitespace=True, header=None, 
+                         names=['fid', 'iid', 'father', 'mother', 'gender', 'trait']) if fam else None
+    
+    if fil_arr is not None:
+        bim_df = bim_df[bim_df.snp.isin(fil_arr)]
+        bim_df = bim_df.reset_index(drop=True)
+        
+    return bim_df, fam_df
 
 def load_linkagedata(fn):
     curfn = glob.glob(fn.format_map(defaultdict(lambda:'*')))[-1]
