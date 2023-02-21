@@ -8,13 +8,13 @@ It is potentially useful for:
 2.	**People that are looking for a PGS method to use ->** They can see which method is currently state-of-the-art.
 
 <!-- notes to self:
-[Do_we_even_need_UCB.ipynb](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)   -->
+[Do_we_even_need_UCB.ipynb](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb) 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev) 
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/mennowitteveen/pgsbenchmark/dev?labpath=nbs/loaders.ipynb)
 [![Google Colab](https://badgen.net/badge/Launch/on%20Google%20Colab/blue?icon=terminal)](https://colab.research.google.com/github/SMPyBandits/SMPyBandits/blob/master/notebooks/Do_we_even_need_UCB.ipynb)
 https://github.com/mennowitteveen/pgsbenchmark/blob/dev/nbs/loaders.ipynb
 https://github.com/binder-examples/jupyter-extension
- -->
+-->
 
 
 ## The Leaderboard
