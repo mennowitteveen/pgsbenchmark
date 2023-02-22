@@ -35,7 +35,7 @@ If you want to have your method on the leaderboard, please send me an email.
 Run the following line on a Unix system with Jupyter and Python (3.2+) installed.
 ```
 git clone https://github.com/mennowitteveen/pgsbenchmark.git
-pip install -r pgsbenchmark/requirements.txt
+pip install -r ./pgsbenchmark/requirements.txt
 jupyter notebook ./pgsbenchmark/nbs/PPB-demonstration.ipynb
 ```
 
