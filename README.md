@@ -7,7 +7,7 @@ at the end of this document in a html comment like this one. -->
 The platform for privacy-preserving benchmarks for polygenic prediction. 
 
 It is potentially useful for: 
-1.	**People that develop PGS methods -> t**he data on pgsbenchmark.org allows them to benchmark their approach and provides everything needed for developing a PGS method.
+1.	**People that develop PGS methods ->** The data on pgsbenchmark.org allows them to benchmark their approach and provides everything needed for developing a PGS method.
 2.	**People that are looking for a PGS method to use ->** They can see which method is currently state-of-the-art.
 
 <br>
@@ -52,7 +52,7 @@ or if the Colab messages *"Warning: This notebook was not authored by Google."* 
 ## The Benchmark data
 
 The files contain all the data that is needed for computing the benchmark and develop PGS methods yourself.
-It is save in HDF5 format. 
+It is saved in HDF5 format. 
 
 **External Sumstats & Validation dataset (LD + matched GWAS sumstats for the 10K induviduals):**<br>
 https://drive.google.com/file/d/1eZIiuz__tiqEtTyL14C_GwPEC6raSFSf
