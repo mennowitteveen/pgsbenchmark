@@ -1,5 +1,8 @@
 # pgsbenchmark.org
 
+<!-- The best way to look at this information is to go to pgsbenchmark.org!
+Some additional information for the "Code and Software Submission Checklist" can be found
+at the end of this document in a html comment like this one. -->
 
 The platform for privacy-preserving benchmarks for polygenic prediction. 
 
@@ -29,9 +32,10 @@ If you want to have your method on the leaderboard, please send me an email.
 
 ## Getting started
 
-Run the following line on a Unix system with Jupyter installed.
+Run the following line on a Unix system with Jupyter and Python (3.2+) installed.
 ```
 git clone https://github.com/mennowitteveen/pgsbenchmark.git
+pip install -r pgsbenchmark/requirements.txt
 jupyter notebook ./pgsbenchmark/nbs/PPB-demonstration.ipynb
 ```
 
@@ -73,11 +77,41 @@ https://www.biorxiv.org/content/10.1101/2022.10.10.510645v1
 
 <br>
 
-<!-- test -->
-
 ![image](https://user-images.githubusercontent.com/6292714/195577590-a8b9e900-bcd8-41ae-a7d6-edc42322cb35.png)
 
 
+<br>
+Some extra information that will not be needed by most users can be seen in the raw format of this readme.
+<br>
+
+
+<!--
+Extended Readme information:
+
+System requirements:
+
+- The all this code should be run using python (3.2+) on a Unix system (Linux or Mac). Required Python packages can be found in requirements.txt
+- The versions that the software has actually been tested on can be found in usedversions.txt
+- There are no special hardware requirements for running the code.
+
+Installation guide:
+
+- Installation instructions are provided above in the section "Getting started".
+- Installation time on a normal machine will be less then 2 minutes.
+
+Demo:
+
+- To run the demo execute the notebook nbs/PPB-demonstration.ipynb using Jupyter.
+- The expected output is what is already present in the notebook. This should reproduce exactly.
+- The expected runtime is a couple of mi nutes on most systems.
+
+Instructions for use:
+
+- The Privacy preserving benchmark data can be loaded and used as in the demonstration.
+- The other code in nbs/ was used to generate the results in the paper.
+- Full replication of the paper results requires individual-level data to be included (UKBB+iPSYCH) which could not be included, since this genetic data is restricted.
+
+-->
 
 
 
