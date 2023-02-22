@@ -42,6 +42,7 @@ class BaseLinkageData():
                  _save_vars = ['L','D','R','sst_df'],
                  _clear_vars = ['L','D','R'],
                  _cross_chrom_ld = False,
+                 _save_s2sst = True,
                  
                  gb_size_limit=10., dtype='float32', verbose=False):
         
@@ -403,16 +404,17 @@ class BaseLinkageData():
                 assert type(arg) in types
                 return arg
 
+#             if hasattr(self,'s'): assert (self.s.shape == (self.n_snps_total,1))
             master_dt = dict(); maxlen = 20
             for key in master_lst:
                 var = getattr(self, key)
                 if type(var) is list:
                     for item in var:
-                        assert type(item) in (bool, str, float, int)
+                        assert type(item) in (bool, str, float, int, type(None))
                         if type(item) is str: assert (len(item) < maxlen)
                 elif type(var) is str:
                         assert len(var) < maxlen
-                master_dt[key] = caster(var, (list, bool, float, int, str))
+                master_dt[key] = caster(var, (list, bool, float, int, str, type(None)))
 
             reg_dt = dict()
             for i, geno_dt in self.reg_dt.items():
@@ -556,69 +558,19 @@ class BaseLinkageData():
 
     # Sumstats: #################
     if True:
-
-        def get_beta_marginal_full(self):
-            beta_mrg_lst = []
-            for i, geno_dt in self.reg_dt.items():
-                beta_mrg_lst.append(geno_dt['beta_mrg'])
-            beta_mrg_full = np.concatenate(beta_mrg_lst)
-            return beta_mrg_full
-
-        get_beta_marginal = get_beta_marginal_full
         
-        def get_beta_marginal_region(self, *, i):
-            return self.reg_dt[i]['beta_mrg']
-
-    # Xda: ######################
-    if True:
-    
-        def get_sda(self, *, i):
-            geno_dt = self.reg_dt[i]
-            if 'sda' in geno_dt.keys():
-                return geno_dt['sda']
-            else:
-                if 'srd' in geno_dt.keys():
-                    sda = geno_dt['srd'].read(dtype=self.dtype)
-                    sda, stansda = sda.standardize(standardizer=geno_dt['stansda'], return_trained=True)
-                    geno_dt['sda'] = sda
-                    geno_dt['stansda'] = stansda
-
-                    if 'loaded_sda' in geno_dt.keys():
-                        self.reloaded_xda_cnt += 1
-                        if self.reloaded_xda_cnt in [5, 20, 100, 400]:
-                            warnings.warn(
-                                f'Reloaded sda for the {self.reloaded_xda_cnt}\'th time. This causes memory swapping,'
-                                ' that might make the computation of linkage quite slow.'
-                                'Probably because memory limits and/or linkage size.')
-                    # Size determination and accounting:
-                    geno_dt['loaded_sda']=True
-                    self.cur_total_size_in_gb += getsizeof(sda.val) / 1024 ** 3
-                    self.xda_q.append((i,'sda'))  # put respective i in queue.
-                    while self.cur_total_size_in_gb > self.gb_size_limit:  # Keep removing till size is ok
-                        i_2_rm, key = self.xda_q.popleft()
-                        if i_2_rm == -1:
-                            continue  # Continue to next iter if encountering a padding -1
-                        rmgeno_dt = self.reg_dt[i_2_rm]
-                        self.cur_total_size_in_gb -= getsizeof(rmgeno_dt[key].val) / 1024 ** 3
-                        rmgeno_dt.pop(key)
-                        if len(self.xda_q) <= 4:
-                            raise Exception('The memory footprint of current settings is too high, '
-                                            'reduce blocksize and/or correction windows or increase memory limits.')
-                    return sda
-                else:
-                    raise Exception(f'No srd or sda found in region i={i}, this is not supposed to happen.')
-
-        def get_pda(self):
-            if not hasattr(self, 'pda'):
-                pda = self.prd.read(dtype=self.dtype)
-                pda, self.stanpda = pda.standardize(return_trained=True,
-                                standardizer=self.pda_standardizer())
-                self.pda = pda
-            return self.pda
-    
-    # Utils: ####################
-    if True:
-    
+        def get_s(self):
+            sst_df = self.get_sumstats_cur()
+            try: 
+                s = sst_df[['s']].values
+                assert np.isnan(s).sum() == 0
+                return s
+            except:
+                stansda = self.get_stansda()
+                s = self.get_stansda().stats[:,[1]]
+                self.s = s
+                return s
+            
         def get_sumstats_cur(self):
             sst_df_lst = []
             for i, geno_dt in self.reg_dt.items():
@@ -656,6 +608,69 @@ class BaseLinkageData():
             self.stansda = combined_unit_standardizer
             return combined_unit_standardizer
 
+
+        def get_beta_marginal_full(self):
+            beta_mrg_lst = []
+            for i, geno_dt in self.reg_dt.items():
+                beta_mrg_lst.append(geno_dt['beta_mrg'])
+            beta_mrg_full = np.concatenate(beta_mrg_lst)
+            return beta_mrg_full
+
+        get_beta_marginal = get_beta_marginal_full
+        
+        def get_beta_marginal_region(self, *, i):
+            return self.reg_dt[i]['beta_mrg']
+
+    # Xda: ######################
+    if True:
+    
+        def get_sda(self, *, i):
+            geno_dt = self.reg_dt[i]
+            if 'sda' in geno_dt.keys():
+                return geno_dt['sda']
+            else:
+                if 'srd' in geno_dt.keys():
+                    sda = geno_dt['srd'].read(dtype=self.dtype)
+                    sda, stansda = sda.standardize(standardizer=geno_dt['stansda'], return_trained=True)
+                    geno_dt['sda'] = sda
+                    geno_dt['stansda'] = stansda
+                    if self._save_s2sst:
+                        geno_dt['sst_df']['s'] = stansda.stats[:,[1]]
+
+                    if 'loaded_sda' in geno_dt.keys():
+                        self.reloaded_xda_cnt += 1
+                        if self.reloaded_xda_cnt in [5, 20, 100, 400]:
+                            warnings.warn(
+                                f'Reloaded sda for the {self.reloaded_xda_cnt}\'th time. This causes memory swapping,'
+                                ' that might make the computation of linkage quite slow.'
+                                'Probably because memory limits and/or linkage size.')
+                    # Size determination and accounting:
+                    geno_dt['loaded_sda']=True
+                    self.cur_total_size_in_gb += getsizeof(sda.val) / 1024 ** 3
+                    self.xda_q.append((i,'sda'))  # put respective i in queue.
+                    while self.cur_total_size_in_gb > self.gb_size_limit:  # Keep removing till size is ok
+                        i_2_rm, key = self.xda_q.popleft()
+                        if i_2_rm == -1:
+                            continue  # Continue to next iter if encountering a padding -1
+                        rmgeno_dt = self.reg_dt[i_2_rm]
+                        self.cur_total_size_in_gb -= getsizeof(rmgeno_dt[key].val) / 1024 ** 3
+                        rmgeno_dt.pop(key)
+                        if len(self.xda_q) <= 4:
+                            raise Exception('The memory footprint of current settings is too high, '
+                                            'reduce blocksize and/or correction windows or increase memory limits.')
+                    return sda
+                else:
+                    raise Exception(f'No srd or sda found in region i={i}, this is not supposed to happen.')
+
+        def get_pda(self):
+            if not hasattr(self, 'pda'):
+                pda = self.prd.read(dtype=self.dtype)
+                pda, self.stanpda = pda.standardize(return_trained=True,
+                                standardizer=self.pda_standardizer())
+                self.pda = pda
+            return self.pda
+    
+
 ''
 class LinkageData(BaseLinkageData):
     pass
@@ -677,4 +692,6 @@ def load_linkagedata(fn):
     curfn = glob.glob(fn.format_map(defaultdict(lambda:'*')))[-1]
     master_dt = json.loads(pd.read_hdf(curfn, key='master_dt').loc[0,0])
     master_dt['curdn'] = os.path.dirname(curfn)
-    return LinkageData(master_dt=master_dt)
+    linkdata = LinkageData(master_dt=master_dt)
+    linkdata.load_linkage_allregions()
+    return linkdata

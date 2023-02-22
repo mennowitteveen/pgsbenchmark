@@ -1,5 +1,6 @@
 # MJW Additions:
 .DS_Store
+linkdata.h5
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

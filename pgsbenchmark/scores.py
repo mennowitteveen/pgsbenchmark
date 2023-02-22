@@ -28,7 +28,7 @@ locals_dt = dict()
 class PrivacyPreservingMetricsComputer():
     
     def __init__(self, *, linkdata, brd, Bm, s=None, dtype='float32',
-                 clear_linkage=True, pbar=tqdm, verbose=True):
+                 clear_linkage=False, pbar=tqdm, verbose=True):
         
         self.linkdata   = linkdata
         self.brd        = brd
@@ -48,7 +48,7 @@ class PrivacyPreservingMetricsComputer():
         #linkdata = self.linkdata.init() # init, in case required.
         brd = self.brd; Bm = self.Bm
         if self.verbose & (self.s is None): print('Retrieving Standard Dev. var \'s\'')
-        s = linkdata.get_stansda().stats[:,[1]] if self.s is None else self.s
+        s = linkdata.get_s() if self.s is None else self.s
         assert (np.isnan(s).sum()+np.isinf(s).sum()) == 0 # add s =standard dev as argument with object creation if this line keeps failing
         bCb = 0.; BmBt = 0.
         info_dt = dict()
