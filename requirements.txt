@@ -1,3 +1,6 @@
 pysnptools
 matplotlib
+pandas
+numpy
 scipy
+tqdm
