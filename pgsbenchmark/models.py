@@ -130,7 +130,7 @@ class L2Pred(BasePred):
                                                                 i_reg=i_reg, linkdata=linkdata)
 
                 # Sample beta from MVN:
-                tau = p*(1-h2)/(n_eff*h2)
+                tau = p/(n_eff*h2)
                 beta_i = linalg.solve(D + tau*np.eye(p_reg), beta_tilde)
                 beta[idx_reg] = beta_i
                 
